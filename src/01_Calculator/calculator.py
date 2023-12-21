@@ -1,5 +1,5 @@
 from operator import add, mul, sub, truediv
-from typing import List, Optional, Union
+from typing import List
 
 ops = {"+": add, "-": sub, "*": mul, "/": truediv}
 
@@ -13,23 +13,23 @@ def prefix_evaluate(prefix_evaluation: str) -> int:
     for token in reversed(prefix_evaluation.split()):
         if token.isdigit():
             stack.append(int(token))
-        else:
-            if token in "+-*/":
-                operand1 = stack.pop()
-                operand2 = stack.pop()
+        elif token in "+-*/":
+            operand1 = stack.pop()
+            operand2 = stack.pop()
 
-                if token == "+":
-                    result = add(operand1, operand2)
-                elif token == "-":
-                    result = sub(operand1, operand2)
-                elif token == "*":
-                    result = mul(operand1, operand2)
-                elif token == "/":
-                    result = truediv(operand1, operand2)
+            if token == "+":
+                result = add(operand1, operand2)
+            elif token == "-":
+                result = sub(operand1, operand2)
+            elif token == "*":
+                result = mul(operand1, operand2)
+            elif token == "/":
+                result = truediv(operand1, operand2)
 
-                stack.append(result)
+            stack.append(result)
 
     return stack[0]
+
 
 def to_prefix(equation: str) -> List[str]:
     precedence = {"+": 1, "-": 1, "*": 2, "/": 2}
@@ -55,6 +55,7 @@ def to_prefix(equation: str) -> List[str]:
         output.append(stack.pop())
 
     return " ".join(list(reversed(output)))
+
 
 def calculate(equation: str) -> int:
     return prefix_evaluate(to_prefix(equation))

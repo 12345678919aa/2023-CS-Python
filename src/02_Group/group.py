@@ -25,8 +25,11 @@ class Person:
         self.name = name
         self.surname = surname
         self.sex = sex
+
+        error_instance = "bday must be date type"
         if not isinstance(bday, date):
-            raise ValueError("bday must be date type")
+            raise ValueError(error_instance)
+
         self.bday = bday
 
     def __repr__(self) -> str:
@@ -34,15 +37,19 @@ class Person:
 
     def __eq__(self, other: "Person") -> bool:
         return (
-            self.name == other.name and
-            self.surname == other.surname and
-            self.sex == other.sex and
-            self.bday == other.bday
+            self.name == other.name
+            and self.surname == other.surname
+            and self.sex == other.sex
+            and self.bday == other.bday
         )
 
     def full_ages(self):
-        today = date.today()
-        return today.year - self.bday.year - ((today.month, today.day) < (self.bday.month, self.bday.day))
+        today = datetime.now(tz=timezone.utc)
+        return (
+            today.year
+            - self.bday.year
+            - ((today.month, today.day) < (self.bday.month, self.bday.day))
+        )
 
 
 class Student(Person):
@@ -65,16 +72,17 @@ class Student(Person):
         self.skill = skill
 
     def __repr__(self) -> str:
-        return f"Student({self.name!r}, {self.surname!r}, {self.sex!r}, {self.bday!r}, {self.group}, {self.skill})"
+        return f"Student({self.name!r}, {self.surname!r}, {self.sex!r}, \
+                         {self.bday!r}, {self.group}, {self.skill})"
 
     def __eq__(self, other: "Student") -> bool:
         return (
-            self.name == other.name and
-            self.surname == other.surname and
-            self.sex == other.sex and
-            self.bday == other.bday and
-            self.group == other.group and
-            self.skill == other.skill
+            self.name == other.name
+            and self.surname == other.surname
+            and self.sex == other.sex
+            and self.bday == other.bday
+            and self.group == other.group
+            and self.skill == other.skill
         )
 
 
@@ -95,22 +103,12 @@ class Group:
         return f"Group([{', '.join([repr(student) for student in self.group])}])"
 
     def sort_by_age(self, *, reverse: bool = False):
-        self.group = sorted(
-            self.group,
-            key=lambda student: student.full_ages(),
-            reverse=reverse
-        )
+        self.group = sorted(self.group, key=lambda student: student.full_ages(), reverse=reverse)
 
     def sort_by_skill(self, *, reverse=False):
-        self.group = sorted(
-            self.group,
-            key=lambda student: student.skill,
-            reverse=reverse
-        )
+        self.group = sorted(self.group, key=lambda student: student.skill, reverse=reverse)
 
     def sort_by_age_and_skill(self, *, reverse=False):
         self.group = sorted(
-            self.group,
-            key=lambda student: (student.full_ages(), student.skill),
-            reverse=reverse
+            self.group, key=lambda student: (student.full_ages(), student.skill), reverse=reverse
         )
