@@ -72,8 +72,10 @@ class Student(Person):
         self.skill = skill
 
     def __repr__(self) -> str:
-        return f"""Student({self.name!r}, {self.surname!r}, {self.sex!r}, 
-                           {self.bday!r}, {self.group}, {self.skill})"""
+        return (
+            f"Student({self.name!r}, {self.surname!r}, {self.sex!r},"
+            f" {self.bday!r}, {self.group!r}, {self.skill!r})"
+        )
 
     def __eq__(self, other: "Student") -> bool:
         return (
